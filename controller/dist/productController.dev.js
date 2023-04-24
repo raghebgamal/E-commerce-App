@@ -100,7 +100,7 @@ exports.getAllProducts = getAllModels(Product); // @desc get Specific categories
 // @route  get/api/v1/categories/:id
 // @access public
 
-exports.getProductById = getModelById(Product); // @desc update Specific categories
+exports.getProductById = getModelById(Product, "reviews"); // @desc update Specific categories
 // @route  update/api/v1/categories/:id
 // @access private
 

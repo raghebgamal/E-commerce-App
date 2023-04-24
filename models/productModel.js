@@ -78,8 +78,16 @@ const productSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+     toJSON: { virtuals: true },
+    toObject: { virtuals: true }
   }
 );
+
+ productSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'product',
+  localField: '_id'
+});
 const createImageUrl = (doc) => {
  
   if (doc.imageCover) {
@@ -114,7 +122,8 @@ productSchema.pre('save', function(next) {
 productSchema.pre(/^find/, function (next) {
    this.populate({
         path: "category",
-    select:" name"});
+     select: " name"
+   });
     
     next();
 })

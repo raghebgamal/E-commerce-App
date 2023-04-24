@@ -85,34 +85,48 @@ exports.getAllModels = function (Model) {
 // // @access public
 
 
-exports.getModelById = function (Model) {
+exports.getModelById = function (Model, populateOption) {
   return asyncHandler(function _callee3(req, res, next) {
-    var id, model;
+    var _req$params, id, productId, query, model;
+
     return regeneratorRuntime.async(function _callee3$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
           case 0:
-            id = req.params.id;
-            _context3.next = 3;
-            return regeneratorRuntime.awrap(Model.findById(id));
+            _req$params = req.params, id = _req$params.id, productId = _req$params.productId;
+            query = Model.findById(id);
 
-          case 3:
+            if (populateOption) {
+              query = query.populate(populateOption);
+            }
+
+            if (productId) {
+              query = Model.findOne({
+                _id: id,
+                product: productId
+              });
+            }
+
+            _context3.next = 6;
+            return regeneratorRuntime.awrap(query);
+
+          case 6:
             model = _context3.sent;
 
             if (model) {
-              _context3.next = 6;
+              _context3.next = 9;
               break;
             }
 
             return _context3.abrupt("return", next(new apiError("no ".concat(Model.modelName, " for this id : ").concat(id), 404)));
 
-          case 6:
+          case 9:
             res.status(200).json({
               status: "success",
               data: model
             });
 
-          case 7:
+          case 10:
           case "end":
             return _context3.stop();
         }

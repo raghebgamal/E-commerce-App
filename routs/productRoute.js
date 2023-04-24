@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("./../controller/authController");
-
+const reviewRouter = require("./../routs/reviewRoute");
 const {
   createProduct,
   getAllProducts,
@@ -20,7 +20,7 @@ const {
   deleteProductValidatorById,
 } = require("./../utils/validatorRules/productValidator");
 
-//router.use("/:categoryId/subCategories", subCategoryRouter);
+router.use("/:productId/reviews", reviewRouter);
 
 router
   .route("/")

@@ -39,13 +39,18 @@ exports.getAllModels = (Model)=>asyncHandler(async (req, res) => {
 // // @route  get/api/v1/categories/:id
 // // @access public
 
-exports.getModelById =(Model)=>asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-    const model = await Model.findById(id)
-//         .populate({
-//     path: "category",
-//     select: "name -_id",
-//   });
+exports.getModelById = (Model, populateOption) => asyncHandler(async (req, res, next) => {
+  const { id ,productId} = req.params;
+  let query = Model.findById(id)
+  if (populateOption) {
+  query=query.populate(populateOption)
+  }
+  if (productId) {
+    query=Model.findOne({_id:id,product:productId})
+  }
+
+    const model = await query
+
   if (!model) {
     return next(new apiError(`no ${Model.modelName} for this id : ${id}`, 404));
   }
@@ -59,10 +64,7 @@ exports.getModelById =(Model)=>asyncHandler(async (req, res, next) => {
 exports.updateModel =(Model)=> asyncHandler(async (req, res, next) => {
   const { id } = req.params;
    
-  if (req.body.password) {
   
- 
-  }
   const model = await Model.findByIdAndUpdate( id , req.body, {
     new: true,
     runValidators: true,
@@ -82,5 +84,6 @@ exports.deleteModel =(Model)=> asyncHandler(async (req, res, next) => {
   if (!model) {
     return next(new apiError(`no ${Model.modelName} for this id : ${id} to delete`, 404));
   }
+
   res.status(204).json({ status: "success", message:  "deleted" });
 });

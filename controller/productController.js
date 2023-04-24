@@ -58,7 +58,7 @@ exports.getAllProducts = getAllModels(Product);
 // @route  get/api/v1/categories/:id
 // @access public
 
-exports.getProductById = getModelById(Product);
+exports.getProductById = getModelById(Product,"reviews");
 
 
 // @desc update Specific categories
