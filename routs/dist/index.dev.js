@@ -22,6 +22,8 @@ var couponRouter = require('./couponRoute');
 
 var cartRouter = require('./cartRoute');
 
+var orderRouter = require('./orderRoute');
+
 var mountRoutes = function mountRoutes(app) {
   app.use("/api/v1/categories", categoryRouter);
   app.use("/api/v1/subCategories", subCategoryRouter);
@@ -34,6 +36,7 @@ var mountRoutes = function mountRoutes(app) {
   app.use('/api/v1/addresses', addressRouter);
   app.use('/api/v1/coupons', couponRouter);
   app.use('/api/v1/cart', cartRouter);
+  app.use('/api/v1/orders', orderRouter);
 };
 
 module.exports = mountRoutes;

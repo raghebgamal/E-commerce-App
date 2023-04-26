@@ -2,6 +2,8 @@
 
 var path = require("path");
 
+var cors = require("cors");
+
 var express = require("express");
 
 var dotenv = require("dotenv").config({
@@ -9,6 +11,8 @@ var dotenv = require("dotenv").config({
 });
 
 var morgan = require("morgan");
+
+var compression = require('compression');
 
 var mountRoutes = require("./routs");
 
@@ -19,6 +23,9 @@ var ApiError = require("./utils/apiError");
 var globalError = require("./middlewares/errorMiddleware");
 
 var app = express();
+app.use(cors());
+app.options("*", cors());
+app.use(compression());
 database_Connection();
 app.use(express.json());
 app.use(express["static"](path.join(__dirname, "uploads")));

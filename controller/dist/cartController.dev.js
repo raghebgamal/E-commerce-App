@@ -36,20 +36,41 @@ exports.addProductToCart = asyncHandler(function _callee(req, res, next) {
 
         case 3:
           product = _context.sent;
-          _context.next = 6;
+
+          if (product) {
+            _context.next = 6;
+            break;
+          }
+
+          return _context.abrupt("return", next(new ApiError("This product is not found in db", 404)));
+
+        case 6:
+          ;
+
+          if (!(product.quantity < 0 || product.quantity === 0)) {
+            _context.next = 9;
+            break;
+          }
+
+          return _context.abrupt("return", next(new ApiError("sorry the product is out of stock", 404)));
+
+        case 9:
+          ; // 1) Get Cart for logged user
+
+          _context.next = 12;
           return regeneratorRuntime.awrap(Cart.findOne({
             user: req.user._id
           }));
 
-        case 6:
+        case 12:
           cart = _context.sent;
 
           if (cart) {
-            _context.next = 13;
+            _context.next = 19;
             break;
           }
 
-          _context.next = 10;
+          _context.next = 16;
           return regeneratorRuntime.awrap(Cart.create({
             user: req.user._id,
             cartItems: [{
@@ -59,12 +80,12 @@ exports.addProductToCart = asyncHandler(function _callee(req, res, next) {
             }]
           }));
 
-        case 10:
+        case 16:
           cart = _context.sent;
-          _context.next = 15;
+          _context.next = 21;
           break;
 
-        case 13:
+        case 19:
           // product exist in cart, update product quantity
           productIndex = cart.cartItems.findIndex(function (item) {
             return item.product.toString() === productId && item.color === color;
@@ -81,13 +102,13 @@ exports.addProductToCart = asyncHandler(function _callee(req, res, next) {
             });
           }
 
-        case 15:
+        case 21:
           // Calculate total cart price
           calcTotalCartPrice(cart);
-          _context.next = 18;
+          _context.next = 24;
           return regeneratorRuntime.awrap(cart.save());
 
-        case 18:
+        case 24:
           res.status(200).json({
             status: 'success',
             message: 'Product added to cart successfully',
@@ -95,7 +116,7 @@ exports.addProductToCart = asyncHandler(function _callee(req, res, next) {
             data: cart
           });
 
-        case 19:
+        case 25:
         case "end":
           return _context.stop();
       }

@@ -28,7 +28,17 @@ const calcTotalCartPrice = (cart) => {
 exports.addProductToCart = asyncHandler(async (req, res, next) => {
   const { productId, color } = req.body;
   const product = await Product.findById(productId);
-
+  if (!product) {
+    return next(
+      new ApiError(`This product is not found in db`, 404)
+    );
+  };
+  
+  if (product.quantity < 0||product.quantity === 0) {
+    return next(
+      new ApiError(`sorry the product is out of stock`, 404)
+    );
+  };
   // 1) Get Cart for logged user
   let cart = await Cart.findOne({ user: req.user._id });
 
