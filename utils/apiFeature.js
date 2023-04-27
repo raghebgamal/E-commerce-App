@@ -23,6 +23,7 @@ class ApiFeature {
         
     }
     sorting() {
+        console.log(this.queryObj.sort)
         if (this.queryObj.sort) {
             const sortBy = this.queryObj.sort.split(",").join(" ");
      this.buildQueryMongoose =   this.buildQueryMongoose.sort(sortBy)

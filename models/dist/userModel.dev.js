@@ -217,6 +217,7 @@ userSchema.methods.toJSON = function () {
   delete userobj.password;
   delete userobj.tokens;
   delete userobj.active;
+  delete userobj.role;
   return userobj;
 };
 
